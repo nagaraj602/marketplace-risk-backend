@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for Spring Boot Risk Backend (Java 25 LTS)
 # Build Stage
-FROM maven:3.9.9-eclipse-temurin-25-noble AS builder
+FROM maven:3.10.0-eclipse-temurin-25-noble AS builder
 
 WORKDIR /build
 
@@ -14,6 +14,8 @@ RUN mvn clean package -DskipTests -B
 FROM eclipse-temurin:25-jre-noble
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 # Security: Non-root user execution
 RUN groupadd -g 10001 appgroup && \
