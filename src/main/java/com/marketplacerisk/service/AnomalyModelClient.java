@@ -18,7 +18,7 @@ public class AnomalyModelClient {
     private static final Logger log = LoggerFactory.getLogger(AnomalyModelClient.class);
     private final RestClient restClient;
 
-    @Value("${risk.model.url:http://localhost:5000}")
+    @Value("${risk.model.url:http://localhost:8282}")
     private String modelUrl;
 
     public AnomalyModelClient(RestClient restClient) {

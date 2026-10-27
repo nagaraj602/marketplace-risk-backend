@@ -35,7 +35,7 @@ Before setting up the backend service, verify the following prerequisites:
 - **Apache Maven 3.9+**: Java build tool configured with `JAVA_HOME` pointing to Java 25 (`mvn -version`)
 - **Docker Engine 24.0+**: (Optional for local JAR execution; required for running PostgreSQL/Redis or container builds)
 - **Running Datastores**: PostgreSQL 17 on port `5432` and Redis 7.4 on port `6379` (or use Docker Compose from `marketplace-risk-platform`)
-- **ML Anomaly Service**: `marketplace-risk-anomaly-model` running on port `5000` (optional; fallback heuristic active if offline)
+- **ML Anomaly Service**: `marketplace-risk-anomaly-model` running on port `8282` (optional; fallback heuristic active if offline)
 
 ---
 
@@ -47,16 +47,16 @@ Before setting up the backend service, verify the following prerequisites:
 # 2. Run automated test suite
 mvn clean test
 
-# 3. Start Spring Boot Application (port 8080)
+# 3. Start Spring Boot Application (port 8281)
 mvn spring-boot:run
 ```
 
 ### Docker Execution
 ```bash
 docker build -t marketplace-risk-backend:latest .
-docker run -p 8080:8080 \
+docker run -p 8281:8281 \
   -e DB_URL=jdbc:postgresql://host.docker.internal:5432/marketplace_risk \
-  -e MODEL_SERVER_URL=http://host.docker.internal:5000 \
+  -e MODEL_SERVER_URL=http://host.docker.internal:8282 \
   marketplace-risk-backend:latest
 ```
 
@@ -66,7 +66,7 @@ docker run -p 8080:8080 \
 
 ### 1. Ingest & Evaluate Seller Signals
 ```bash
-curl -X POST http://localhost:8080/api/v1/risk/evaluate \
+curl -X POST http://localhost:8281/api/v1/risk/evaluate \
   -H "Content-Type: application/json" \
   -d '{
     "sellerId": "seller_demo_01",
@@ -83,12 +83,12 @@ curl -X POST http://localhost:8080/api/v1/risk/evaluate \
 ### 2. Retrieve Review Queue Cases
 ```bash
 # Get only pending cases awaiting analyst review
-curl http://localhost:8080/api/v1/cases?pendingOnly=true
+curl http://localhost:8281/api/v1/cases?pendingOnly=true
 ```
 
 ### 3. Resolve or Dismiss a Case
 ```bash
-curl -X PATCH http://localhost:8080/api/v1/cases/1/resolve \
+curl -X PATCH http://localhost:8281/api/v1/cases/1/resolve \
   -H "Content-Type: application/json" \
   -d '{
     "decision": "RESOLVED",
@@ -98,5 +98,5 @@ curl -X PATCH http://localhost:8080/api/v1/cases/1/resolve \
 
 ### 4. Query Real-Time Telemetry Metrics
 ```bash
-curl http://localhost:8080/api/v1/risk/telemetry
+curl http://localhost:8281/api/v1/risk/telemetry
 ```

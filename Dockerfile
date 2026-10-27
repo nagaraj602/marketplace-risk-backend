@@ -23,11 +23,11 @@ COPY --from=builder --chown=appuser:appgroup /build/target/marketplace-risk-back
 
 USER appuser
 
-EXPOSE 8080
+EXPOSE 8281
 
 ENV JAVA_OPTS="-XX:+UseZGC -XX:+ZGenerational -Xms256m -Xmx768m"
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD curl -f http://localhost:8080/actuator/health || exit 1
+    CMD curl -f http://localhost:8281/actuator/health || exit 1
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

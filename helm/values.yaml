@@ -7,14 +7,14 @@ backend:
     pullPolicy: Always
   service:
     type: ClusterIP
-    port: 8080
-    targetPort: 8080
+    port: 8281
+    targetPort: 8281
   env:
-    SERVER_PORT: "8080"
+    SERVER_PORT: "8281"
     DB_HOST: "marketplace-risk-rds.internal"
     DB_PORT: "5432"
     DB_NAME: "marketplace_risk"
-    MODEL_SERVER_URL: "http://marketplace-risk-anomaly-model:5000"
+    MODEL_SERVER_URL: "http://marketplace-risk-anomaly-model:8282"
     AUTO_ENFORCE_THRESHOLD: "85.0"
     ANALYST_REVIEW_THRESHOLD: "50.0"
   secret:
@@ -30,13 +30,13 @@ backend:
   probes:
     liveness:
       path: /actuator/health/liveness
-      port: 8080
+      port: 8281
       initialDelaySeconds: 25
       periodSeconds: 10
       timeoutSeconds: 3
     readiness:
       path: /actuator/health/readiness
-      port: 8080
+      port: 8281
       initialDelaySeconds: 20
       periodSeconds: 5
       timeoutSeconds: 3
