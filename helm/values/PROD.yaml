@@ -1,0 +1,14 @@
+backend:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
+    limits:
+      cpu: 3000m
+      memory: 3072Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 65

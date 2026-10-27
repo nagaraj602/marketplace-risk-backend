@@ -1,0 +1,47 @@
+backend:
+  name: marketplace-risk-backend
+  replicaCount: 2
+  image:
+    repository: __BACKEND_IMAGE_REPOSITORY__
+    tag: __BACKEND_IMAGE_TAG__
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+  env:
+    SERVER_PORT: "8080"
+    DB_HOST: "marketplace-risk-rds.internal"
+    DB_PORT: "5432"
+    DB_NAME: "marketplace_risk"
+    MODEL_SERVER_URL: "http://marketplace-risk-anomaly-model:5000"
+    AUTO_ENFORCE_THRESHOLD: "85.0"
+    ANALYST_REVIEW_THRESHOLD: "50.0"
+  secret:
+    DB_USERNAME: "cmlza3VzZXI="      # base64: riskuser
+    DB_PASSWORD: "cmlza3Bhc3MxMjM="  # base64: riskpass123
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1500m
+      memory: 1536Mi
+  probes:
+    liveness:
+      path: /actuator/health/liveness
+      port: 8080
+      initialDelaySeconds: 25
+      periodSeconds: 10
+      timeoutSeconds: 3
+    readiness:
+      path: /actuator/health/readiness
+      port: 8080
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      timeoutSeconds: 3
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70

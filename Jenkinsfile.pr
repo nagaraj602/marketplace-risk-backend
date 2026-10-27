@@ -1,0 +1,46 @@
+@Library('sharedlibrary')_
+
+pipeline {
+    agent {
+        label 'agent'
+    }
+    environment {
+        imageName = "marketplace-risk-backend-pr"
+        dockerTag = "${env.BUILD_NUMBER}"
+        gitRepoURL = "https://github.com/nagaraj602/marketplace-risk-backend.git"
+    }
+    stages {
+        stage('Git Checkout') {
+            steps {
+                gitCheckout(env.gitRepoURL, env.BRANCH_NAME, "githubCred")
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                echo "Running Java 21 Spring Boot Unit and Integration Tests..."
+                mavenBuild("clean test")
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                sonarAnalysis('marketplace-risk-backend', 'marketplace-risk-backend', 'sonar-server', 'sonarToken')
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dockerImageBuild(env.imageName, env.dockerTag, 'Dockerfile')
+            }
+        }
+
+        stage('Trivy Security Scans') {
+            steps {
+                trivyScan('fs', '.', 'HIGH,CRITICAL', 0)
+                trivyScan('config', 'Dockerfile', 'HIGH,CRITICAL', 0)
+                trivyScan('image', "${env.imageName}:${env.dockerTag}", 'HIGH,CRITICAL', 0, "backend-trivy-report-${env.BUILD_NUMBER}.json")
+            }
+        }
+    }
+}
