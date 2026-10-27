@@ -100,3 +100,12 @@ curl -X PATCH http://localhost:8281/api/v1/cases/1/resolve \
 ```bash
 curl http://localhost:8281/api/v1/risk/telemetry
 ```
+
+---
+
+## 🛡️ CI/CD & Jenkins Integration
+
+This service utilizes Jenkins Multibranch Pipelines powered by [jenkins-sharedlibraries](https://github.com/nagaraj602/jenkins-sharedlibraries.git):
+- **Pull Request Quality Gate (`Jenkinsfile.pr`)**: Automatically triggered via GitHub webhook; runs Java 25 unit tests (`mvn clean test`), SonarQube quality gate analysis (`sonar-server`), local Docker builds, and Trivy vulnerability scans.
+- **Continuous Deployment (`Jenkinsfile`)**: Triggered on branch push/merge; builds production image, pushes to Amazon ECR, updates Helm values, and deploys to AWS EKS (`dev`, `uat`, or `prod`).
+- **Webhook Integration**: Configured with the **Multibranch Scan Webhook Trigger** plugin using trigger token `marketplace-risk-backend-token`. See the [Complete Jenkins Integration Guide](https://github.com/nagaraj602/marketplace-risk-platform#%EF%B8%8F-jenkins-cicd-setup--multibranch-integration-guide).
