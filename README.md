@@ -9,7 +9,7 @@ Core backend detection, velocity rule evaluation, and automated enforcement engi
 | Repository | GitHub Link | Purpose & Tech Stack |
 | :--- | :--- | :--- |
 | **Platform & Infrastructure** | [nagaraj602/marketplace-risk-platform](https://github.com/nagaraj602/marketplace-risk-platform.git) | Terraform AWS IaC (VPC, EKS 1.37, RDS PostgreSQL 17, Redis 7.4, Jenkins), DB init scripts, Docker Compose |
-| **Core Risk Backend** | [nagaraj602/marketplace-risk-backend](https://github.com/nagaraj602/marketplace-risk-backend.git) | Java 21, Spring Boot 4.1.2, JPA, Velocity Rule Engine, Risk Aggregation, Enforcement Orchestration |
+| **Core Risk Backend** | [nagaraj602/marketplace-risk-backend](https://github.com/nagaraj602/marketplace-risk-backend.git) | Java 25 LTS, Spring Boot 4.1.2, JPA, Velocity Rule Engine, Risk Aggregation, Enforcement Orchestration |
 | **ML Anomaly Model** | [nagaraj602/marketplace-risk-anomaly-model](https://github.com/nagaraj602/marketplace-risk-anomaly-model.git) | Python 3.15.2, FastAPI 0.162, scikit-learn 1.9.1 Isolation Forest, behavioral anomaly inference |
 | **Trust & Safety Portal** | [nagaraj602/marketplace-risk-frontend](https://github.com/nagaraj602/marketplace-risk-frontend.git) | React 19, Vite 8, Node 24, Express 5, Lucide-React, live review queue & signal injection simulator |
 | **Jenkins Shared Libraries** | [nagaraj602/jenkins-sharedlibraries](https://github.com/nagaraj602/jenkins-sharedlibraries.git) | Reusable Groovy pipeline vars (`trivyScan`, `sonarAnalysis`, `dockerECRImagePush`, `kubernetesEKSHelmDeployEnv`) |
@@ -17,12 +17,12 @@ Core backend detection, velocity rule evaluation, and automated enforcement engi
 ---
 
 ## 🚀 Tech Stack
-- **Language**: Java 21 LTS (OpenJDK 21)
+- **Language**: Java 25 LTS (OpenJDK 25 / Eclipse Temurin 25)
 - **Framework**: Spring Boot 4.1.2 (Spring Data JPA, Web, Actuator, Validation)
 - **Databases**: PostgreSQL 17+ / AWS RDS, Embedded H2 for isolated testing
 - **Cache & Velocity Counters**: Redis sliding window engine
 - **Integration**: Python ML Anomaly Service (`/score`) via HTTP RestClient
-- **Containerization**: Multi-stage Docker (`eclipse-temurin:21-jdk-noble` -> `eclipse-temurin:21-jre-noble`)
+- **Containerization**: Multi-stage Docker (`eclipse-temurin:25-noble` builder -> `eclipse-temurin:25-jre-noble` runner)
 - **Orchestration**: Kubernetes + Helm v3/v4 charts with HPA autoscaling
 - **CI/CD**: Jenkins Shared Library Multibranch Pipelines (SonarQube & Trivy pre-merge quality gates)
 
@@ -31,8 +31,8 @@ Core backend detection, velocity rule evaluation, and automated enforcement engi
 ## ⚙️ Prerequisites
 
 Before setting up the backend service, verify the following prerequisites:
-- **Java Development Kit (JDK 21 LTS)**: OpenJDK 21 or Eclipse Temurin 21 (`java -version`, `javac -version`)
-- **Apache Maven 3.9+**: Java build tool (`mvn -version`)
+- **Java Development Kit (JDK 25 LTS)**: OpenJDK 25 or Eclipse Temurin 25 (`java -version`, `javac -version`)
+- **Apache Maven 3.9+**: Java build tool configured with `JAVA_HOME` pointing to Java 25 (`mvn -version`)
 - **Docker Engine 24.0+**: (Optional for local JAR execution; required for running PostgreSQL/Redis or container builds)
 - **Running Datastores**: PostgreSQL 17 on port `5432` and Redis 7.4 on port `6379` (or use Docker Compose from `marketplace-risk-platform`)
 - **ML Anomaly Service**: `marketplace-risk-anomaly-model` running on port `5000` (optional; fallback heuristic active if offline)

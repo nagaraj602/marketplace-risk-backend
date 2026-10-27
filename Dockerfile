@@ -1,6 +1,6 @@
-# Multi-stage Dockerfile for Spring Boot Risk Backend
+# Multi-stage Dockerfile for Spring Boot Risk Backend (Java 25 LTS)
 # Build Stage
-FROM maven:3.9.9-eclipse-temurin-21-noble AS builder
+FROM maven:3.9.9-eclipse-temurin-25-noble AS builder
 
 WORKDIR /build
 
@@ -10,8 +10,8 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn clean package -DskipTests -B
 
-# Runtime Stage
-FROM eclipse-temurin:21-jre-noble
+# Runtime Stage (Java 25 LTS)
+FROM eclipse-temurin:25-jre-noble
 
 WORKDIR /app
 
