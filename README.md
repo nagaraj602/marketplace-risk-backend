@@ -28,6 +28,17 @@ Core backend detection, velocity rule evaluation, and automated enforcement engi
 
 ---
 
+## ⚙️ Prerequisites
+
+Before setting up the backend service, verify the following prerequisites:
+- **Java Development Kit (JDK 21 LTS)**: OpenJDK 21 or Eclipse Temurin 21 (`java -version`, `javac -version`)
+- **Apache Maven 3.9+**: Java build tool (`mvn -version`)
+- **Docker Engine 24.0+**: (Optional for local JAR execution; required for running PostgreSQL/Redis or container builds)
+- **Running Datastores**: PostgreSQL 17 on port `5432` and Redis 7.4 on port `6379` (or use Docker Compose from `marketplace-risk-platform`)
+- **ML Anomaly Service**: `marketplace-risk-anomaly-model` running on port `5000` (optional; fallback heuristic active if offline)
+
+---
+
 ## 🛠️ How to Setup & Run
 
 ### Local Execution
