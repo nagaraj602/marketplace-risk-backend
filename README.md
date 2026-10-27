@@ -8,10 +8,10 @@ Core backend detection, velocity rule evaluation, and automated enforcement engi
 
 | Repository | GitHub Link | Purpose & Tech Stack |
 | :--- | :--- | :--- |
-| **Platform & Infrastructure** | [nagaraj602/marketplace-risk-platform](https://github.com/nagaraj602/marketplace-risk-platform.git) | Terraform AWS IaC (VPC, EKS 1.32, RDS PostgreSQL 16, Redis 7, Jenkins), DB init scripts, Docker Compose |
+| **Platform & Infrastructure** | [nagaraj602/marketplace-risk-platform](https://github.com/nagaraj602/marketplace-risk-platform.git) | Terraform AWS IaC (VPC, EKS 1.37, RDS PostgreSQL 17, Redis 7.4, Jenkins), DB init scripts, Docker Compose |
 | **Core Risk Backend** | [nagaraj602/marketplace-risk-backend](https://github.com/nagaraj602/marketplace-risk-backend.git) | Java 21, Spring Boot 4.1.2, JPA, Velocity Rule Engine, Risk Aggregation, Enforcement Orchestration |
-| **ML Anomaly Model** | [nagaraj602/marketplace-risk-anomaly-model](https://github.com/nagaraj602/marketplace-risk-anomaly-model.git) | Python 3.12, FastAPI, scikit-learn Isolation Forest, behavioral anomaly inference |
-| **Trust & Safety Portal** | [nagaraj602/marketplace-risk-frontend](https://github.com/nagaraj602/marketplace-risk-frontend.git) | React 19, Vite 8, Express 5, Lucide-React, live review queue & signal injection simulator |
+| **ML Anomaly Model** | [nagaraj602/marketplace-risk-anomaly-model](https://github.com/nagaraj602/marketplace-risk-anomaly-model.git) | Python 3.15.2, FastAPI 0.162, scikit-learn 1.9.1 Isolation Forest, behavioral anomaly inference |
+| **Trust & Safety Portal** | [nagaraj602/marketplace-risk-frontend](https://github.com/nagaraj602/marketplace-risk-frontend.git) | React 19, Vite 8, Node 24, Express 5, Lucide-React, live review queue & signal injection simulator |
 | **Jenkins Shared Libraries** | [nagaraj602/jenkins-sharedlibraries](https://github.com/nagaraj602/jenkins-sharedlibraries.git) | Reusable Groovy pipeline vars (`trivyScan`, `sonarAnalysis`, `dockerECRImagePush`, `kubernetesEKSHelmDeployEnv`) |
 
 ---
@@ -19,7 +19,7 @@ Core backend detection, velocity rule evaluation, and automated enforcement engi
 ## 🚀 Tech Stack
 - **Language**: Java 21 LTS (OpenJDK 21)
 - **Framework**: Spring Boot 4.1.2 (Spring Data JPA, Web, Actuator, Validation)
-- **Databases**: PostgreSQL 16+ / AWS RDS, Embedded H2 for isolated testing
+- **Databases**: PostgreSQL 17+ / AWS RDS, Embedded H2 for isolated testing
 - **Cache & Velocity Counters**: Redis sliding window engine
 - **Integration**: Python ML Anomaly Service (`/score`) via HTTP RestClient
 - **Containerization**: Multi-stage Docker (`eclipse-temurin:21-jdk-noble` -> `eclipse-temurin:21-jre-noble`)
