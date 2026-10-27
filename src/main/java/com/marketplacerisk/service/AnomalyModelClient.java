@@ -29,14 +29,28 @@ public class AnomalyModelClient {
         String targetUrl = modelUrl + "/score";
         try {
             log.info("Requesting anomaly inference for sellerId={} at {}", signal.getSellerId(), targetUrl);
+            String jsonPayload = String.format(java.util.Locale.US,
+                "{\"sellerId\":\"%s\",\"accountAgeDays\":%d,\"listingsLastHour\":%d,\"ordersLastHour\":%d,\"positiveReviewsRatio\":%.2f,\"uniqueDevicesCount\":%d,\"distinctIpCount\":%d,\"avgListingPriceUsd\":%.2f,\"payoutAccountChangedRecently\":%b,\"geoMismatchCountry\":%b}",
+                signal.getSellerId(),
+                signal.getAccountAgeDays(),
+                signal.getListingsLastHour(),
+                signal.getOrdersLastHour(),
+                signal.getPositiveReviewsRatio(),
+                signal.getUniqueDevicesCount(),
+                signal.getDistinctIpCount(),
+                signal.getAvgListingPriceUsd(),
+                signal.isPayoutAccountChangedRecently(),
+                signal.isGeoMismatchCountry()
+            );
+
             ModelScoreResponse response = restClient.post()
                     .uri(targetUrl)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(signal)
+                    .body(jsonPayload)
                     .retrieve()
                     .body(ModelScoreResponse.class);
 
-            if (response != null) {
+            if (response != null && response.getAnomalyScore() != null) {
                 return response;
             }
         } catch (Exception ex) {
